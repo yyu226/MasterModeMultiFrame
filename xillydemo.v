@@ -1,3 +1,6 @@
+/******************** Source
+                      Tree   *******************/
+
 module xillydemo
   (
                 //custom defined
@@ -353,19 +356,6 @@ module xillydemo
    
   assign fifo_reset = !grst/*!user_r_read_32_open*/;
  
- 
-   /*always@(posedge FRAME_VALID or negedge ready_to_fill)
-   begin
-        if(!ready_to_fill)
-                frame_count = 0;
-        else
-        begin
-                if(frame_count<7)
-                        frame_count = frame_count + 1;
-                else
-                        frame_count = 0;
-        end       
-   end*/
    
         
    assign  user_r_read_8_eof = 0;
@@ -407,17 +397,7 @@ module xillydemo
    assign LUPA_CLK = clk_80;
    
    assign LUPA_RST = grst;               //Reset_N  
-   
-   
-   /*IBUFG input_buffer(
-                       .O       (frame_valid),
-                       .I       (FRAME_VALID)
-   );
-   IBUFG input_buffer2(
-                       .O       (line_valid),
-                       .I       (LINE_VALID)
-   );*/
-   
+     
    
    assign FIFO_WR_EN = (state==2) & LINE_VALID &  hFRAME_VALID;      //Master Mode
   //assign FIFO_WR_EN = (frame_count==4) & LINE_VALID & FRAME_VALID & (line_cntr>0) & (line_cntr<=480);
@@ -513,31 +493,7 @@ module xillydemo
                 done <= 0;
    end
    
-   /*always@(negedge hFRAME_VALID)
-   begin
-        if(state == 2)
-        begin
-             if(multi_frame < 24)
-                    done <= 0;
-             else
-                    done <= 1;
-        end
-        else
-             done <= 0;
-   end
-   always@(posedge hFRAME_VALID)
-   begin
-        if(state != 2)
-            multi_frame <= 0;
-        else
-        begin
-                if(multi_frame < 24)
-                    multi_frame <= multi_frame + 1;
-                else
-                    multi_frame <= 0;    
-        end
-   end*/
-   
+      
    /***********************************************************************************/
    always@(posedge FRAME_VALID)
         frame_select = frame_select + 1;
